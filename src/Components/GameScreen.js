@@ -1,5 +1,10 @@
-import React from 'react'
-import { IoChevronBackCircleOutline } from 'react-icons/io5'
+import React, { useState } from 'react';
+import Heading from './Heading';
+import StatusBar from './StatusBar';
+import ProgressBar from './ProgressBar';
+import Question from './Question';
+import AnswerCard from './AnswerCard';
+import ProgressButton from './ProgressButton';
 
 /*
 1) Design 4 Sections of Interface
@@ -9,22 +14,38 @@ import { IoChevronBackCircleOutline } from 'react-icons/io5'
     - Question Card 
         - Question, 4 buttons for answers for selection
 */
-
 export default function GameScreen() {
+    const [answerCard, setAnswerCard] = useState([]);
+
+    const answerCards = answerCard.map(answer => {
+        return (
+            <AnswerCard 
+                answer="Answer 1"
+            />
+        )
+    })
+    
     return(
-        <section className="flex container items-center mx-auto min-h-[100vh]">
-            <div className="bg-[#6A5BE2] min-h-[50vh] w-full rounded-3xl">
-                <div className="grid grid-cols-3 justify-items-center">
-                    <button className="w-16 bg-red-400"><IoChevronBackCircleOutline/></button>
-                    <h2 className="w-32 bg-red-400">Topic</h2>
-                    <div>
-                        <button className="w-16 bg-red-400">Mute Button</button>
-                        <button className="w-16 bg-red-400">Help Button</button>
-                    </div>
-                    
-                </div>
+        <main className="flex items-center container mx-auto min-h-[100vh]">
+            <div className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
+                <section className="h-2/5">
+                    <Heading />
+                    <StatusBar />
+                    <ProgressBar />
+                    <Question />
+                </section>
+                <section className="h-2/5 grid grid-cols-2 grid-rows-2 justify-items-center my-8">
+                    <AnswerCard answer="ANSWER 1"/>
+                    <AnswerCard answer="ANSWER 1"/>
+                    <AnswerCard answer="ANSWER 1"/>
+                    <AnswerCard answer="ANSWER 1"/>
+                </section>
+                <section className="h-1/5 mb-8">
+                    <ProgressButton />
+                </section>
+                
             </div>
             
-        </section>
+        </main>
     )
 }

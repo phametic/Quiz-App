@@ -4,7 +4,7 @@ import React from 'react';
 export default function MainScreen(props) {
     return(
         <div className="flex container items-center mx-auto min-h-[100vh]">
-            <div className="relative flex flex-col justify-center items-center bg-[#6A5BE2] min-h-[50vh] w-full rounded-3xl">
+            <div className="relative flex flex-col justify-center items-center bg-[#6A5BE2] min-h-[50vh] w-full rounded-3xl overflow-hidden">
                 <h1 className="text-6xl my-4">Trivio</h1>
                 <span className="text-3xl my-4">Test your knowledge with Trivio!</span>
                 <button 
@@ -12,7 +12,8 @@ export default function MainScreen(props) {
                     onClick={props.clickHandler}
                 >
                     GET STARTED</button>
-                
+                <div className="blob-1 bg-[#FFFAD1] w-80 h-80 absolute rotate-45"></div>
+                <div className="blob-2 bg-[#DEEBF8] w-80 h-80 absolute rotate-12"></div>
             </div>
                 
         </div>
