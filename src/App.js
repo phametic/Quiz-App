@@ -1,12 +1,23 @@
 import './App.css';
-import {useState} from 'react'
+import { useState, useEffect } from 'react'
 import MainScreen from './Components/MainScreen';
 import GameScreen from './Components/GameScreen';
 
 
 function App() {
 
-const [mainScreen, setMainScreen] = useState(false);
+const [mainScreen, setMainScreen] = useState(true);
+const [triviaData, setTriviaData] = useState([]);
+
+useEffect(() => {
+  async function fetchData() {
+    const res = await fetch("https://opentdb.com/api.php?amount=10&encode=url3986");
+    const data = await res.json();
+    setTriviaData(data.results)
+  }
+  fetchData();
+  
+}, []);
 
 function handleClick() {
   setMainScreen(prevState => !prevState);
@@ -19,7 +30,7 @@ function handleClick() {
         ? 
           <MainScreen clickHandler={handleClick}/> 
         :
-          <GameScreen />
+          <GameScreen triviaData={triviaData}/>
       }
       
     </div>
