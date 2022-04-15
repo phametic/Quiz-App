@@ -32,7 +32,6 @@ function handleClick() {
         :
           <GameScreen triviaData={triviaData}/>
       }
-      
     </div>
   );
 }

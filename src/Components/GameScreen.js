@@ -16,6 +16,7 @@ import { nanoid } from 'nanoid';
         - Question, 4 buttons for answers for selection
 */
 export default function GameScreen(props) {
+    
     const [triviaQuestion, setTriviaQuestion] = useState({
         id: "",
         category: "",
@@ -23,27 +24,43 @@ export default function GameScreen(props) {
         answers: []
       });
 
-    function getTriviaQuestion() {
-        const randomNumber = Math.floor(Math.random() * props.triviaData.length);
+    const [questionCounter, setQuestionCounter] = useState(0);
+    const [totalQuestions, setTotalQuestions] = useState(0);
+    const [correctCounter, setCorrectCounter] = useState(0);
+    const [incorrectCounter, setIncorrectCounter] = useState(0);
+
+    function getTriviaQuestion(questionNum) {
         setTriviaQuestion({
-            category: props.triviaData[randomNumber].category,
-            question: props.triviaData[randomNumber].question,
+            category: props.triviaData[questionNum].category,
+            question: props.triviaData[questionNum].question,
             answers: [
-                props.triviaData[randomNumber].correct_answer,
-                props.triviaData[randomNumber].incorrect_answers[0],
-                props.triviaData[randomNumber].incorrect_answers[1],
-                props.triviaData[randomNumber].incorrect_answers[2]
+                props.triviaData[questionNum].correct_answer,
+                props.triviaData[questionNum].incorrect_answers[0],
+                props.triviaData[questionNum].incorrect_answers[1],
+                props.triviaData[questionNum].incorrect_answers[2]
             ]
         })
+        setTotalQuestions(props.triviaData.length);
       }
 
     useEffect(() => {
-        getTriviaQuestion();
-    }, [])
+        getTriviaQuestion(questionCounter);
+    }, [questionCounter])
 
-    console.log(decodeURIComponent(triviaQuestion.answers))
+    function shuffle(arr) {
+        var j, x, index;
+        for (index = arr.length - 1; index > 0; index--) {
+            j = Math.floor(Math.random() * (index + 1));
+            x = arr[index];
+            arr[index] = arr[j];
+            arr[j] = x;
+        }
+        return arr;
+    }
 
-    const answerCards = triviaQuestion.answers.map(answers => {
+    console.log(triviaQuestion.answers)
+
+    const answerCards = shuffle(triviaQuestion.answers).filter((element) => {return element !== undefined}).map(answers => {
         return(
             <AnswerCard 
                 key={nanoid()}
@@ -51,13 +68,19 @@ export default function GameScreen(props) {
             />
         )
     })
+
+    function handleClick() {
+        console.log("Button Pressed!");
+        setQuestionCounter(prev => prev + 1)
+        console.log(questionCounter)
+    }
     
     return(
         <main className="flex items-center container mx-auto min-h-[100vh]">
             <div className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
                 <section className="h-2/5">
                     <Heading topic={triviaQuestion.category}/>
-                    <StatusBar />
+                    <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter}/>
                     <ProgressBar />
                     <Question question={triviaQuestion.question}/>
                 </section>
@@ -65,7 +88,7 @@ export default function GameScreen(props) {
                     {answerCards}
                 </section>
                 <section className="h-1/5 mb-8">
-                    <ProgressButton />
+                    <ProgressButton handleClick={handleClick}/>
                 </section>
                 
             </div>
