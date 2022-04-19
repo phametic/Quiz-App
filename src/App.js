@@ -30,7 +30,7 @@ function handleClick() {
         ? 
           <MainScreen clickHandler={handleClick}/> 
         :
-          <GameScreen triviaData={triviaData}/>
+          <GameScreen triviaData={triviaData} setScreen={setMainScreen}/>
       }
     </div>
   );
