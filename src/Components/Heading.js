@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoChevronBackCircleOutline, IoHelpCircleOutline } from 'react-icons/io5'
+import { IoChevronBackCircleOutline } from 'react-icons/io5'
 import { AiOutlineSound } from 'react-icons/ai'
 
 export default function Heading(props) {
@@ -9,12 +9,11 @@ export default function Heading(props) {
                     <div>
                         <button className="w-10 text-4xl text-white hover:text-lime-400"><IoChevronBackCircleOutline/></button>
                     </div>
-                    <h2 className="w-80 text-3xl text-black tracking-wider text-center ml-8 font-bold">{
+                    <h2 className="w-80 text-3xl text-white tracking-wider text-center ml-8 font-bold">{
                         decodeURIComponent(props.topic)}
                     </h2>
                     <div className="">
                         <button className="w-10 text-4xl text-white hover:text-lime-400"><AiOutlineSound/></button>
-                        <button className="w-10 text-4xl text-white hover:text-lime-400"><IoHelpCircleOutline/></button>
                     </div>
                 </div>
         </section>
