@@ -8,16 +8,19 @@ import SelectionScreen from './Components/SelectionScreen';
 function App() {
 
 const [mainScreen, setMainScreen] = useState(true);
-const [triviaData, setTriviaData] = useState([]);
+const [categories, setCategories] = useState([]);
 
 useEffect(() => {
-  fetchData(10);
+  fetchCategories();
+  //fetchData(10);
 }, []);
 
-async function fetchData(numOfQuestions) {
-  const res = await fetch(`https://opentdb.com/api.php?amount=${numOfQuestions}&encode=url3986`);
+console.log(categories[1])
+
+async function fetchCategories() {
+  const res = await fetch(`https://opentdb.com/api_category.php`);
   const data = await res.json();
-  setTriviaData(data.results)
+  setCategories(data.trivia_categories)
 }
 
 function handleClick() {
@@ -31,7 +34,7 @@ function handleClick() {
         ? 
           <MainScreen clickHandler={handleClick}/> 
         :
-          <SelectionScreen />
+          <SelectionScreen categories={categories}/>
           // <GameScreen triviaData={triviaData} setScreen={setMainScreen} fetchData={fetchData}/>
       }
     </div>

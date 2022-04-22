@@ -104,7 +104,7 @@ export default function GameScreen(props) {
             {resultsScreen ? 
                 <ResultsScreen correctCounter={correctCounter} incorrectCounter={incorrectCounter} handleClick={handleClick} resultsScreen={resultsScreen} questionCounter={questionCounter}/>
             : 
-                <div className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
+                <section className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
                     <section className="h-2/5">
                         <Heading topic={triviaQuestion.category}/>
                         <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter}/>
@@ -117,7 +117,7 @@ export default function GameScreen(props) {
                     {/* <section className="h-1/5 mb-8">
                         <ProgressButton handleClick={handleClick} gameStatus={resultsScreen}/>
                     </section> */}
-                </div>
+                </section>
             }
         </main>
     )
