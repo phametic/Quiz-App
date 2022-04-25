@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import QuestionSelection from './QuestionSelection';
 import DifficultySelection from './DifficultySelection';
+import PlayButton from './PlayButton'
 import Category from './Category';
 
 export default function SelectionScreen(props) {
@@ -8,36 +9,72 @@ export default function SelectionScreen(props) {
     const [selectScreenData, setSelectScreenData] = useState({
         questions: "10",
         difficulty: "easy",
-        topic: 9
-    })
+        category: 9,
+    });
 
-    const [triviaData, setTriviaData] = useState([]);
-
-    async function fetchData(numOfQuestions) {
-        const res = await fetch(`https://opentdb.com/api.php?amount=10&category=9&difficulty=easy`);
+    async function fetchData() {
+        const res = await fetch(`https://opentdb.com/api.php?amount=${selectScreenData.questions}&category=${selectScreenData.category}&difficulty=${selectScreenData.difficulty}&encode=url3986`);
         const data = await res.json();
-        setTriviaData(data.results)
-      }
+        props.setTriviaData(data.results);
+    }
+
+    useEffect(() => {
+        fetchData();
+        switch(selectScreenData.difficulty) {
+            case "easy":
+                props.setCounter(20)
+            break;
+            case "medium":
+                props.setCounter(15)
+            break;
+            case "hard":
+                props.setCounter(10)
+            break;
+            default:
+                props.setCounter(20)
+            break;
+        }
+    }, [selectScreenData])
 
     function handleChange(event) {
         const {name, value, type, checked} = event.target;
         setSelectScreenData(prevFormData => {
             return {
                 ...prevFormData,
-                [name]: type === "checkbox" ? checked : value
+                [name]: type === "checkbox" ? checked : value,
             }
         })
     }
 
-    const categories = props.categories.map(category => {
+    //Handle clicking of categories card
+    function handleOnClick(id) {
+            setSelectScreenData(prevFormData => {
+                    return {
+                        ...prevFormData,
+                        category: id,
+                    } 
+            })
+    }
+
+    function handlePlayButton() {
+        console.log("Play button clicked.");
+        props.setGameScreen(prev => !prev)
+        props.setSelectScreen(prev => !prev)
+    }
+
+    const categories = props.categoriesData.map(category => {
         return(
             <Category 
                 key={category.id}
                 id={category.id}
                 category={category.name}
+                onClick={() => handleOnClick(category.id)}
+                isSelected={selectScreenData.category === category.id ? true : false}
             />
         )
     })
+
+    //console.log(categories)
 
     const titleStyle = "text-3xl text-white tracking-wider text-center"
     return(
@@ -60,9 +97,9 @@ export default function SelectionScreen(props) {
                 <section className="h-1/5 w-11/12 mx-auto flex justify-center flex-wrap gap-8 my-4">
                     {categories}
                 </section>
-                <section className=" my-12 h-1/10 flex justify-center mx-auto text-center border-slate-900 border-2 bg-white hover:bg-lime-400 w-1/4 h-16 rounded-xl cursor-pointer">
-                    <button>Play</button>
-                </section>
+                <PlayButton 
+                    onClick={handlePlayButton}
+                />
             </section>
         </section>
     )

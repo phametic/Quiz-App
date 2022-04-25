@@ -8,9 +8,6 @@ import AnswerCard from './AnswerCard';
 import ResultsScreen from './ResultsScreen'
 import { nanoid } from 'nanoid';
 
-/*
-
-*/
 export default function GameScreen(props) {
     
     const [triviaQuestion, setTriviaQuestion] = useState({
@@ -27,6 +24,10 @@ export default function GameScreen(props) {
     const [incorrectCounter, setIncorrectCounter] = useState(0);
     const [resultsScreen, setResultsScreen] = useState(false);
 
+    const [newQuestion, setNewQuestion] = useState(false)
+
+    const [isActive, setIsActive] = useState(false);
+
     function getTriviaQuestion(questionNum) {
         setTriviaQuestion({
             category: props.triviaData[questionNum].category,
@@ -42,15 +43,6 @@ export default function GameScreen(props) {
         setTotalQuestions(props.triviaData.length);
       }
 
-    useEffect(() => {
-        if(questionCounter < 10) {
-            getTriviaQuestion(questionCounter);
-        } else {
-            console.log("Game Done.")
-            setResultsScreen(true);
-        }
-    }, [questionCounter])
-
     function shuffle(arr) {
         var j, x, index;
         for (index = arr.length - 1; index > 0; index--) {
@@ -62,7 +54,22 @@ export default function GameScreen(props) {
         return arr;
     }
 
-    const answerCards = shuffle(triviaQuestion.answers).filter((element) => {return element !== undefined}).map(answers => {
+    useEffect(() => {
+        if(questionCounter < props.triviaData.length) {
+            getTriviaQuestion(questionCounter);
+            //setNewQuestion(true)
+            setIsActive(true);
+            console.log("New Question")
+        } else {
+            console.log("Game Done.")
+            setResultsScreen(true);
+        }
+    }, [questionCounter])
+
+    console.log(triviaQuestion.correctAnswer)
+    console.log(triviaQuestion.answers)
+
+    const answerCards = triviaQuestion.answers.filter((element) => {return element !== undefined}).map(answers => {
         return(
             <AnswerCard 
                 key={nanoid()}
@@ -76,25 +83,29 @@ export default function GameScreen(props) {
         if(!resultsScreen) {
             setQuestionCounter(prev => prev + 1)
         } else {
-            props.setScreen(true)
-            props.fetchData(10);
+            props.setScreen(true);
+            setResultsScreen(prev => !prev)
+            props.setGameScreen(prev => !prev)
+            setQuestionCounter(0);
+            setCorrectCounter(0);
+            setIncorrectCounter(0);
         }
     }
-
-    console.log(triviaQuestion.correctAnswer)
 
     function checkAnswer(answer) {
         const selectedAnswer = answer;
         //Check to see if the player has selected the correct answer
         //If its correct, increment the correct counter and go to next question
         if(selectedAnswer === decodeURIComponent(triviaQuestion.correctAnswer)) {
-            setCorrectCounter(prev => prev + 1)
-            setQuestionCounter(prev => prev + 1)
+            setCorrectCounter(prev => prev + 1);
+            setQuestionCounter(prev => prev + 1);
+            setNewQuestion(prev => !prev);
         } else {
             //if not add to the incorrect answer and move on to next question regardless
             //TODO: Add in button animation for correct / incorrect answer 
             setIncorrectCounter(prev => prev + 1)
             setQuestionCounter(prev => prev + 1)
+            setNewQuestion(prev => !prev);
         }
     }
 
@@ -107,12 +118,12 @@ export default function GameScreen(props) {
                 <section className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
                     <section className="h-2/5">
                         <Heading topic={triviaQuestion.category}/>
-                        <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter}/>
+                        <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter} counter={props.counter} setCounter={props.setCounter}/>
                         <ProgressBar />
                         <Question question={triviaQuestion.question}/>
                     </section>
                     <section className="h-2/5 grid grid-cols-2 grid-rows-2 mb-6 w-10/12 justify-items-center mx-auto">
-                        {answerCards}
+                        {newQuestion ? shuffle(answerCards) : answerCards}
                     </section>
                     {/* <section className="h-1/5 mb-8">
                         <ProgressButton handleClick={handleClick} gameStatus={resultsScreen}/>
