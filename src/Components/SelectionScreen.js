@@ -12,10 +12,19 @@ export default function SelectionScreen(props) {
         category: 9,
     });
 
+    const [invalidChoice, setInvalidChoice] = useState(false)
+
     async function fetchData() {
         const res = await fetch(`https://opentdb.com/api.php?amount=${selectScreenData.questions}&category=${selectScreenData.category}&difficulty=${selectScreenData.difficulty}&encode=url3986`);
         const data = await res.json();
-        props.setTriviaData(data.results);
+        if(data.response_code === 1) {
+            console.log("No trivia data.");
+            setInvalidChoice(true);
+        } else {
+            props.setTriviaData(data.results);
+            setInvalidChoice(false);
+        }
+        
     }
 
     useEffect(() => {
@@ -48,18 +57,20 @@ export default function SelectionScreen(props) {
 
     //Handle clicking of categories card
     function handleOnClick(id) {
-            setSelectScreenData(prevFormData => {
-                    return {
-                        ...prevFormData,
-                        category: id,
-                    } 
-            })
+        setSelectScreenData(prevFormData => {
+                return {
+                    ...prevFormData,
+                    category: id,
+                } 
+        })
     }
 
     function handlePlayButton() {
         console.log("Play button clicked.");
-        props.setGameScreen(prev => !prev)
-        props.setSelectScreen(prev => !prev)
+        if(!invalidChoice) {
+            props.setGameScreen(prev => !prev);
+            props.setSelectScreen(prev => !prev);
+        }
     }
 
     const categories = props.categoriesData.map(category => {
@@ -70,6 +81,7 @@ export default function SelectionScreen(props) {
                 category={category.name}
                 onClick={() => handleOnClick(category.id)}
                 isSelected={selectScreenData.category === category.id ? true : false}
+                invalidChoice={invalidChoice}
             />
         )
     })

@@ -22,8 +22,13 @@ useEffect(() => {
 
 async function fetchCategories() {
   const res = await fetch(`https://opentdb.com/api_category.php`);
+  if(res.status !== 200) {
+    throw new Error("Cannot fetch data.")
+  }
+  console.log(res)
   const data = await res.json();
   setCategoriesData(data.trivia_categories)
+  console.log(data)
 }
 
 function handleClick() {

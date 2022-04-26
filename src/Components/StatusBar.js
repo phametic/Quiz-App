@@ -18,7 +18,7 @@ export default function StatusBar(props) {
             <p>{props.currentQuestion + 1}/{props.totalQuestions}</p>
             <Countdown
                 key={props.currentQuestion}
-                date={Date.now() + 5000}
+                date={Date.now() + props.counter * 1000}
                 renderer={renderer}
             />
         </section>
