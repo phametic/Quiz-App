@@ -65,7 +65,7 @@ export default function GameScreen(props) {
             setResultsScreen(true);
         }
     }, [questionCounter])
-
+    
     console.log(triviaQuestion.correctAnswer)
     console.log(triviaQuestion.answers)
 
@@ -90,6 +90,14 @@ export default function GameScreen(props) {
             setCorrectCounter(0);
             setIncorrectCounter(0);
         }
+    }
+
+    function handleBackButton() {
+            props.setScreen(true);
+            props.setGameScreen(prev => !prev)
+            setQuestionCounter(0);
+            setCorrectCounter(0);
+            setIncorrectCounter(0);
     }
 
     function checkAnswer(answer) {
@@ -117,7 +125,7 @@ export default function GameScreen(props) {
             : 
                 <section className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
                     <section className="h-2/5">
-                        <Heading topic={triviaQuestion.category}/>
+                        <Heading topic={triviaQuestion.category} handleBackButton={handleBackButton}/>
                         <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter} counter={props.counter} setCounter={props.setCounter}/>
                         <ProgressBar />
                         <Question question={triviaQuestion.question}/>

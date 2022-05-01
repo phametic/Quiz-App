@@ -3,6 +3,8 @@ import QuestionSelection from './QuestionSelection';
 import DifficultySelection from './DifficultySelection';
 import PlayButton from './PlayButton'
 import Category from './Category';
+import { IoChevronBackCircleOutline } from 'react-icons/io5';
+import { AiOutlineSound } from 'react-icons/ai';
 
 export default function SelectionScreen(props) {
 
@@ -12,7 +14,7 @@ export default function SelectionScreen(props) {
         category: 9,
     });
 
-    const [invalidChoice, setInvalidChoice] = useState(false)
+    const [invalidChoice, setInvalidChoice] = useState(false);
 
     async function fetchData() {
         const res = await fetch(`https://opentdb.com/api.php?amount=${selectScreenData.questions}&category=${selectScreenData.category}&difficulty=${selectScreenData.difficulty}&encode=url3986`);
@@ -73,6 +75,11 @@ export default function SelectionScreen(props) {
         }
     }
 
+    function handleBackButton() {
+        props.setSelectScreen(prev => !prev);
+        props.setMainScreen(prev => !prev)
+    }
+
     const categories = props.categoriesData.map(category => {
         return(
             <Category 
@@ -88,25 +95,34 @@ export default function SelectionScreen(props) {
 
     //console.log(categories)
 
-    const titleStyle = "text-3xl text-white tracking-wider text-center"
+    const titleStyle = "text-3xl text-white tracking-wider text-center mb-4"
     return(
-        <section className="flex items-center container mx-auto min-h-[50vh]">
-            <section className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
-                <section className="h-1/5 mt-8">
-                    <h2 className={titleStyle}>Choose Your Topic</h2>
+        <section className="flex items-center container mx-auto min-h-[50vh] select-none">
+            <section className="h-3/6 gradientBg rounded-3xl w-full items-start">
+                <section className="h-1/5 mt-8 flex flex-row justify-center gap-32">
+                        <button 
+                            className="w-10 text-4xl text-white hover:text-lime-400"
+                            onClick={handleBackButton}
+                        >
+                            <IoChevronBackCircleOutline/>
+                        </button>
+                    <h2 className={titleStyle}>Trivia Selection</h2>
+                    <div className="">
+                        <button className="w-10 text-4xl text-white hover:text-lime-400"><AiOutlineSound/></button>
+                    </div>
                 </section>
-                <section className="h-1/5 my-4">
-                    <h2 className={titleStyle}>Number of Questions</h2>
+                <section className="h-1/5 my-6">
+                    <h2 className={titleStyle}>Total Questions</h2>
                     <QuestionSelection selectScreenData={selectScreenData} handleChange={handleChange}/>
                 </section>
-                <section className="h-1/5 my-4">
+                <section className="h-1/5 my-6">
                     <h2 className={titleStyle}>Difficulty</h2>
                     <DifficultySelection selectScreenData={selectScreenData} handleChange={handleChange}/>
                 </section>
-                <section className="h-1/10 my-4">
+                <section className="h-1/10 my-6">
                     <h2 className={titleStyle}>Categories</h2>
                 </section>
-                <section className="h-1/5 w-11/12 mx-auto flex justify-center flex-wrap gap-8 my-4">
+                <section className="h-96 w-11/12 mx-auto flex flex-wrap justify-center gap-8 my-4 overflow-y-scroll cats">
                     {categories}
                 </section>
                 <PlayButton 

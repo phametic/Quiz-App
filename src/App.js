@@ -21,14 +21,14 @@ useEffect(() => {
 }, []);
 
 async function fetchCategories() {
-  const res = await fetch(`https://opentdb.com/api_category.php`);
-  if(res.status !== 200) {
-    throw new Error("Cannot fetch data.")
-  }
-  console.log(res)
-  const data = await res.json();
-  setCategoriesData(data.trivia_categories)
-  console.log(data)
+    const res = await fetch(`https://opentdb.com/api_category.php`);
+    if(res.status !== 200) {
+      throw new Error("Cannot fetch data.")
+    }
+    console.log(res)
+    const data = await res.json();
+    setCategoriesData(data.trivia_categories)
+    console.log(data)
 }
 
 function handleClick() {
@@ -39,7 +39,7 @@ function handleClick() {
   return (
     <div className="font-rubik">
       {mainScreen && <MainScreen clickHandler={handleClick}/>}
-      {selectScreen && <SelectionScreen categoriesData={categoriesData} setTriviaData={setTriviaData} triviaData={triviaData} setGameScreen={setGameScreen} setSelectScreen={setSelectScreen} setCounter={setCounter}/>}
+      {selectScreen && <SelectionScreen setMainScreen={setMainScreen} categoriesData={categoriesData} setTriviaData={setTriviaData} triviaData={triviaData} setGameScreen={setGameScreen} setSelectScreen={setSelectScreen} setCounter={setCounter}/>}
       {gameScreen && <GameScreen triviaData={triviaData} setScreen={setMainScreen} setGameScreen={setGameScreen} counter={counter} setCounter={setCounter}/>}
     </div>
   );
