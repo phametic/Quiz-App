@@ -1,10 +1,11 @@
 import React from 'react';
-
-
+import Zoom from 'react-reveal/Zoom';
 export default function MainScreen(props) {
     return(
+        
         <div className="flex container items-center mx-auto min-h-[100vh]">
-            <div className="relative flex flex-col justify-center items-center bg-[#6A5BE2] min-h-[50vh] w-full rounded-3xl overflow-hidden">
+                  
+            <div className="relative flex flex-col justify-center items-center gradientBg min-h-[50vh] w-full rounded-3xl overflow-hidden">
                 <h1 className="text-6xl my-4 font-bold text-white">Trivio</h1>
                 <span className="text-3xl my-4 font-bold text-white">Test your knowledge with Trivio!</span>
                 <button 

@@ -7,6 +7,8 @@ import AnswerCard from './AnswerCard';
 //import ProgressButton from './ProgressButton';
 import ResultsScreen from './ResultsScreen'
 import { nanoid } from 'nanoid';
+import Slide from 'react-reveal/Slide';
+import Fade from 'react-reveal/Fade';
 
 export default function GameScreen(props) {
     
@@ -24,9 +26,9 @@ export default function GameScreen(props) {
     const [incorrectCounter, setIncorrectCounter] = useState(0);
     const [resultsScreen, setResultsScreen] = useState(false);
 
-    const [newQuestion, setNewQuestion] = useState(false)
+    const [newQuestion, setNewQuestion] = useState(false);
 
-    const [isActive, setIsActive] = useState(false);
+    const [noAnswerSelected, setNoAnswerSelected] = useState(false);
 
     function getTriviaQuestion(questionNum) {
         setTriviaQuestion({
@@ -56,65 +58,67 @@ export default function GameScreen(props) {
 
     useEffect(() => {
         if(questionCounter < props.triviaData.length) {
+            console.log("Next question.")
             getTriviaQuestion(questionCounter);
-            //setNewQuestion(true)
-            setIsActive(true);
-            console.log("New Question")
         } else {
-            console.log("Game Done.")
             setResultsScreen(true);
         }
     }, [questionCounter])
-    
-    console.log(triviaQuestion.correctAnswer)
-    console.log(triviaQuestion.answers)
 
     const answerCards = triviaQuestion.answers.filter((element) => {return element !== undefined}).map(answers => {
         return(
-            <AnswerCard 
-                key={nanoid()}
-                answer={decodeURIComponent(answers)}
-                handleClick={() => checkAnswer(decodeURIComponent(answers))}
-            />
+            <Fade big spy={questionCounter}>
+                <AnswerCard 
+                    key={nanoid()}
+                    answer={decodeURIComponent(answers)}
+                    handleClick={() => checkAnswer(decodeURIComponent(answers))}
+                />   
+            </Fade>
         )
     });
 
+    function resetGame() {
+        props.setScreen(true);
+        props.setGameScreen(prev => !prev)
+        setQuestionCounter(0);
+        setCorrectCounter(0);
+        setIncorrectCounter(0);
+    }
+
+    //For Home/Continue Button
     function handleClick() {
         if(!resultsScreen) {
-            setQuestionCounter(prev => prev + 1)
+            nextQuestion();
         } else {
-            props.setScreen(true);
             setResultsScreen(prev => !prev)
-            props.setGameScreen(prev => !prev)
-            setQuestionCounter(0);
-            setCorrectCounter(0);
-            setIncorrectCounter(0);
+            setNewQuestion(prev => !prev)
+            resetGame();
         }
     }
 
     function handleBackButton() {
-            props.setScreen(true);
-            props.setGameScreen(prev => !prev)
-            setQuestionCounter(0);
-            setCorrectCounter(0);
-            setIncorrectCounter(0);
+            resetGame();
     }
 
+    function nextQuestion() {
+        setQuestionCounter(prev => prev + 1);
+        setNewQuestion(prev => !prev);
+    }
+
+    //Answer Card Click Handle
     function checkAnswer(answer) {
         const selectedAnswer = answer;
         //Check to see if the player has selected the correct answer
         //If its correct, increment the correct counter and go to next question
-        if(selectedAnswer === decodeURIComponent(triviaQuestion.correctAnswer)) {
-            setCorrectCounter(prev => prev + 1);
-            setQuestionCounter(prev => prev + 1);
-            setNewQuestion(prev => !prev);
-        } else {
-            //if not add to the incorrect answer and move on to next question regardless
-            //TODO: Add in button animation for correct / incorrect answer 
-            setIncorrectCounter(prev => prev + 1)
-            setQuestionCounter(prev => prev + 1)
-            setNewQuestion(prev => !prev);
-        }
+            if(selectedAnswer === decodeURIComponent(triviaQuestion.correctAnswer)) {
+                setCorrectCounter(prev => prev + 1);
+                nextQuestion();
+            } else {
+                //if not add to the incorrect answer and move on to next question regardless
+                //TODO: Add in button animation for correct / incorrect answer 
+                setIncorrectCounter(prev => prev + 1)
+                nextQuestion();
+            }
     }
 
     return(
@@ -123,12 +127,14 @@ export default function GameScreen(props) {
             {resultsScreen ? 
                 <ResultsScreen correctCounter={correctCounter} incorrectCounter={incorrectCounter} handleClick={handleClick} resultsScreen={resultsScreen} questionCounter={questionCounter}/>
             : 
-                <section className="h-3/6 bg-[#6A5BE2] rounded-3xl w-full items-start">
+                <section className="h-3/6 gradientBg rounded-3xl w-full items-start">
                     <section className="h-2/5">
                         <Heading topic={triviaQuestion.category} handleBackButton={handleBackButton}/>
-                        <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter} counter={props.counter} setCounter={props.setCounter}/>
-                        <ProgressBar />
-                        <Question question={triviaQuestion.question}/>
+                        <StatusBar totalQuestions={totalQuestions} currentQuestion={questionCounter} counter={props.counter} setCounter={props.setCounter} nextQuestion={nextQuestion} setIncorrectCounter={setIncorrectCounter}/>
+                        <ProgressBar progressed={Math.round(((questionCounter + 1) / totalQuestions) * 100)}/>
+                        <Slide left spy={questionCounter}>
+                            <Question question={triviaQuestion.question}/>
+                        </Slide>
                     </section>
                     <section className="h-2/5 grid grid-cols-2 grid-rows-2 mb-6 w-10/12 justify-items-center mx-auto">
                         {newQuestion ? shuffle(answerCards) : answerCards}

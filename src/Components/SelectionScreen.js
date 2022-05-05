@@ -5,6 +5,7 @@ import PlayButton from './PlayButton'
 import Category from './Category';
 import { IoChevronBackCircleOutline } from 'react-icons/io5';
 import { AiOutlineSound } from 'react-icons/ai';
+import Flash from 'react-reveal/Flash';
 
 export default function SelectionScreen(props) {
 
@@ -89,6 +90,7 @@ export default function SelectionScreen(props) {
                 onClick={() => handleOnClick(category.id)}
                 isSelected={selectScreenData.category === category.id ? true : false}
                 invalidChoice={invalidChoice}
+                className=""
             />
         )
     })
@@ -97,24 +99,27 @@ export default function SelectionScreen(props) {
 
     const titleStyle = "text-3xl text-white tracking-wider text-center mb-4"
     return(
-        <section className="flex items-center container mx-auto min-h-[50vh] select-none">
-            <section className="h-3/6 gradientBg rounded-3xl w-full items-start">
+        <section className="flex container items-center mx-auto min-h-[100vh] select-none">
+            <section className="h-3/6 gradientBg rounded-3xl w-full items-start ">
                 <section className="h-1/5 mt-8 flex flex-row justify-center gap-32">
-                        <button 
-                            className="w-10 text-4xl text-white hover:text-lime-400"
-                            onClick={handleBackButton}
-                        >
-                            <IoChevronBackCircleOutline/>
-                        </button>
+                    <button 
+                        className="w-10 text-4xl text-white hover:text-lime-400"
+                        onClick={handleBackButton}
+                    >
+                        <IoChevronBackCircleOutline/>
+                    </button>
                     <h2 className={titleStyle}>Trivia Selection</h2>
                     <div className="">
-                        <button className="w-10 text-4xl text-white hover:text-lime-400"><AiOutlineSound/></button>
+                        <button 
+                        className="w-10 text-4xl text-white hover:text-lime-400">
+                            <AiOutlineSound/>
+                        </button>
                     </div>
                 </section>
                 <section className="h-1/5 my-6">
                     <h2 className={titleStyle}>Total Questions</h2>
-                    <QuestionSelection selectScreenData={selectScreenData} handleChange={handleChange}/>
-                </section>
+                        <QuestionSelection selectScreenData={selectScreenData} handleChange={handleChange}/>
+                  </section>
                 <section className="h-1/5 my-6">
                     <h2 className={titleStyle}>Difficulty</h2>
                     <DifficultySelection selectScreenData={selectScreenData} handleChange={handleChange}/>

@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react'
 import MainScreen from './Components/MainScreen';
 import GameScreen from './Components/GameScreen';
 import SelectionScreen from './Components/SelectionScreen';
-
+import Fade from 'react-reveal/Fade';
+import Zoom from 'react-reveal/Zoom';
+import Flash from 'react-reveal/Flash';
 
 function App() {
 
@@ -38,9 +40,21 @@ function handleClick() {
 
   return (
     <div className="font-rubik">
-      {mainScreen && <MainScreen clickHandler={handleClick}/>}
-      {selectScreen && <SelectionScreen setMainScreen={setMainScreen} categoriesData={categoriesData} setTriviaData={setTriviaData} triviaData={triviaData} setGameScreen={setGameScreen} setSelectScreen={setSelectScreen} setCounter={setCounter}/>}
-      {gameScreen && <GameScreen triviaData={triviaData} setScreen={setMainScreen} setGameScreen={setGameScreen} counter={counter} setCounter={setCounter}/>}
+          {mainScreen && 
+          <Fade>
+            <MainScreen clickHandler={handleClick}/>
+          </Fade>
+          }
+          {selectScreen && 
+          <Fade>
+            <SelectionScreen setMainScreen={setMainScreen} categoriesData={categoriesData} setTriviaData={setTriviaData} triviaData={triviaData} setGameScreen={setGameScreen} setSelectScreen={setSelectScreen} setCounter={setCounter}/>
+          </Fade>
+          }
+          {gameScreen && 
+          <Fade>
+            <GameScreen triviaData={triviaData} setScreen={setMainScreen} setGameScreen={setGameScreen} counter={counter} setCounter={setCounter}/>
+          </Fade>
+          }
     </div>
   );
 }
