@@ -5,7 +5,7 @@ export default function QuestionSelection(props) {
     const radioStyle = "rounded-xl"
 
     return(
-        <form className=" w-9/12 flex flex-row gap-10 justify-center mx-auto text-3xl form">
+        <form className="w-5/12 md:w-9/12 flex flex-row gap-5 md:gap-10 justify-center mx-auto text-xl md:text-3xl form">
         <div className="">
             <input 
                 type="radio"

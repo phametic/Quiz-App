@@ -4,15 +4,15 @@
 
 .blob-1 {
     border-radius: 17% 83% 56% 44% / 22% 65% 35% 78% ;
-    margin-left: 100%;
+    /* margin-left: 100%;
+    margin-bottom: 50%; */
     overflow: hidden;
-    margin-bottom: 50%;
 }
 
 .blob-2 {
     border-radius: 32% 68% 70% 30% / 83% 95% 14% 17%;
-    margin-right: 100%;
-    margin-top: 50%;
+    /* margin-right: 100%;
+    margin-top: 50%; */
     overflow: hidden;
 }
 
@@ -28,57 +28,75 @@ input[type="radio"] {
     display: none;
     
 }
-
-.form label {
-    position: relative;
-    color: black;
-    background-color: white;
-    font-size: 26px;
-    text-align: center;
-    height: 125px;
-    width: 125px;
-    line-height: 125px;
-    display:block;
-    cursor: pointer;
-    border: 3px solid transparent;
-    -webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-    
+@media only screen and (min-width: 768px) {
+    .form label {
+        position: relative;
+        color: black;
+        background-color: white;
+        font-size: 26px;
+        text-align: center;
+        height: 125px;
+        width: 125px;
+        line-height: 125px;
+        display:block;
+        cursor: pointer;
+        border: 3px solid transparent;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; 
+    }
+    .form input:checked + label:after {
+        content: "\2713";
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 100%;
+        border: 2px solid #333;
+        background-color: #2fcc71;
+        z-index: 999;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
 }
+
+@media only screen and (max-width: 600px) {
+    .form label {
+        position: relative;
+        color: black;
+        background-color: white;
+        font-size: 16px;
+        text-align: center;
+        height: 75px;
+        width: 75px;
+        line-height: 75px;
+        display:block;
+        cursor: pointer;
+        border: 3px solid transparent;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box; 
+    }
+    .form input:checked + label:after {
+        content: "\2713";
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 100%;
+        border: 2px solid #333;
+        background-color: #2fcc71;
+        z-index: 999;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+}
+
 
 .form input:checked + label {
     border: 3px solid #333;
     background-color: #2fcc71;
     color: white;
-}
-
-.form input:checked + label:after {
-    content: "\2713";
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 100%;
-    border: 2px solid #333;
-    background-color: #2fcc71;
-    z-index: 999;
-    position: absolute;
-    top: -10px;
-    right: -10px;
-}
-
-.form input:checked + label:after {
-    content: "\2713";
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 100%;
-    border: 2px solid #333;
-    background-color: #2fcc71;
-    z-index: 999;
-    position: absolute;
-    top: -10px;
-    right: -10px;
 }
 
 .cats::-webkit-scrollbar {

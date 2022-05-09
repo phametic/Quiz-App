@@ -4,8 +4,8 @@ import MainScreen from './Components/MainScreen';
 import GameScreen from './Components/GameScreen';
 import SelectionScreen from './Components/SelectionScreen';
 import Fade from 'react-reveal/Fade';
-import Zoom from 'react-reveal/Zoom';
-import Flash from 'react-reveal/Flash';
+import useSound from 'use-sound';
+import clickSfx from './Assets/Sounds/click_sfx.mp3';
 
 function App() {
 
@@ -16,6 +16,13 @@ const [gameScreen, setGameScreen] = useState(false)
 const [categoriesData, setCategoriesData] = useState([]);
 const [triviaData, setTriviaData] = useState([]);
 const [counter, setCounter] = useState(20);
+
+const [playSfx, setPlaySfx] = useState(true)
+const [play] = useSound(clickSfx,
+  { volume: 0.4 }
+  );
+
+const [muted, setMuted] = useState(false);
 
 useEffect(() => {
   fetchCategories();
@@ -34,25 +41,32 @@ async function fetchCategories() {
 }
 
 function handleClick() {
+  play();
   setMainScreen(prevState => !prevState);
-  setSelectScreen(prevState => !prevState)
+  setSelectScreen(prevState => !prevState);
+}
+
+function handleMuteButton() {
+  if(!playSfx)
+    play();
+  setPlaySfx(prev => !prev)
 }
 
   return (
     <div className="font-rubik">
           {mainScreen && 
           <Fade>
-            <MainScreen clickHandler={handleClick}/>
+            <MainScreen clickHandler={handleClick} playSfx={playSfx}/>
           </Fade>
           }
           {selectScreen && 
           <Fade>
-            <SelectionScreen setMainScreen={setMainScreen} categoriesData={categoriesData} setTriviaData={setTriviaData} triviaData={triviaData} setGameScreen={setGameScreen} setSelectScreen={setSelectScreen} setCounter={setCounter}/>
+            <SelectionScreen setMainScreen={setMainScreen} categoriesData={categoriesData} setTriviaData={setTriviaData} triviaData={triviaData} setGameScreen={setGameScreen} setSelectScreen={setSelectScreen} setCounter={setCounter} playSfx={playSfx} handleMuteButton={handleMuteButton}/>
           </Fade>
           }
           {gameScreen && 
           <Fade>
-            <GameScreen triviaData={triviaData} setScreen={setMainScreen} setGameScreen={setGameScreen} counter={counter} setCounter={setCounter}/>
+            <GameScreen triviaData={triviaData} setScreen={setMainScreen} setGameScreen={setGameScreen} counter={counter} setCounter={setCounter} playSfx={playSfx} handleMuteButton={handleMuteButton}/>
           </Fade>
           }
     </div>

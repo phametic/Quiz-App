@@ -4,10 +4,16 @@ import DifficultySelection from './DifficultySelection';
 import PlayButton from './PlayButton'
 import Category from './Category';
 import { IoChevronBackCircleOutline } from 'react-icons/io5';
-import { AiOutlineSound } from 'react-icons/ai';
-import Flash from 'react-reveal/Flash';
+import MuteButton from './MuteButton';
+import useSound from 'use-sound';
+import clickSfx from '../Assets/Sounds/click_sfx.mp3';
 
 export default function SelectionScreen(props) {
+
+    const [playClickSfx] = useSound(
+        clickSfx,
+        { volume: 0.4 }
+        );
 
     const [selectScreenData, setSelectScreenData] = useState({
         questions: "10",
@@ -50,6 +56,8 @@ export default function SelectionScreen(props) {
 
     function handleChange(event) {
         const {name, value, type, checked} = event.target;
+        if(props.playSfx)
+            playClickSfx();
         setSelectScreenData(prevFormData => {
             return {
                 ...prevFormData,
@@ -60,6 +68,9 @@ export default function SelectionScreen(props) {
 
     //Handle clicking of categories card
     function handleOnClick(id) {
+        if(props.playSfx)
+            playClickSfx();
+
         setSelectScreenData(prevFormData => {
                 return {
                     ...prevFormData,
@@ -69,7 +80,8 @@ export default function SelectionScreen(props) {
     }
 
     function handlePlayButton() {
-        console.log("Play button clicked.");
+        if(props.playSfx)
+            playClickSfx();
         if(!invalidChoice) {
             props.setGameScreen(prev => !prev);
             props.setSelectScreen(prev => !prev);
@@ -77,6 +89,8 @@ export default function SelectionScreen(props) {
     }
 
     function handleBackButton() {
+        if(props.playSfx)
+            playClickSfx();
         props.setSelectScreen(prev => !prev);
         props.setMainScreen(prev => !prev)
     }
@@ -90,35 +104,29 @@ export default function SelectionScreen(props) {
                 onClick={() => handleOnClick(category.id)}
                 isSelected={selectScreenData.category === category.id ? true : false}
                 invalidChoice={invalidChoice}
-                className=""
             />
         )
     })
 
     //console.log(categories)
 
-    const titleStyle = "text-3xl text-white tracking-wider text-center mb-4"
+    const titleStyle = "text-2xl md:text-3xl lg:text-4xl text-white tracking-wider text-center mb-4 flex justify-center items-center"
     return(
-        <section className="flex container items-center mx-auto min-h-[100vh] select-none">
+        <section className="flex md:container mx-auto items-center min-h-[100vh] select-none">
             <section className="h-3/6 gradientBg rounded-3xl w-full items-start ">
-                <section className="h-1/5 mt-8 flex flex-row justify-center gap-32">
+                <section className="h-1/5 mt-8 flex justify-center items-center gap-8 md:gap-32 bg-red-400">
                     <button 
-                        className="w-10 text-4xl text-white hover:text-lime-400"
+                        className="w-10 text-2xl md:text-4xl text-white hover:text-lime-400"
                         onClick={handleBackButton}
                     >
                         <IoChevronBackCircleOutline/>
                     </button>
                     <h2 className={titleStyle}>Trivia Selection</h2>
-                    <div className="">
-                        <button 
-                        className="w-10 text-4xl text-white hover:text-lime-400">
-                            <AiOutlineSound/>
-                        </button>
-                    </div>
+                    <MuteButton handleMuteButton={props.handleMuteButton} playSfx={props.playSfx}/>
                 </section>
                 <section className="h-1/5 my-6">
                     <h2 className={titleStyle}>Total Questions</h2>
-                        <QuestionSelection selectScreenData={selectScreenData} handleChange={handleChange}/>
+                    <QuestionSelection selectScreenData={selectScreenData} handleChange={handleChange}/>
                   </section>
                 <section className="h-1/5 my-6">
                     <h2 className={titleStyle}>Difficulty</h2>
@@ -127,8 +135,10 @@ export default function SelectionScreen(props) {
                 <section className="h-1/10 my-6">
                     <h2 className={titleStyle}>Categories</h2>
                 </section>
-                <section className="h-96 w-11/12 mx-auto flex flex-wrap justify-center gap-8 my-4 overflow-y-scroll cats">
-                    {categories}
+                <section className="relative my-4">
+                    <section className="flex flex-wrap gap-8 mx-auto justify-center w-11/12 h-96 overflow-y-auto cats">
+                        {categories}
+                    </section>
                 </section>
                 <PlayButton 
                     onClick={handlePlayButton}
