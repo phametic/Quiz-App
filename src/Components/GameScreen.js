@@ -30,8 +30,6 @@ export default function GameScreen(props) {
 
     const [newQuestion, setNewQuestion] = useState(false);
 
-    const [noAnswerSelected, setNoAnswerSelected] = useState(false);
-
     const [playClickSfx] = useSound(
         clickSfx,
         { volume: 0.4 }

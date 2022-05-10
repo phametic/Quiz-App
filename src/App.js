@@ -22,7 +22,7 @@ const [play] = useSound(clickSfx,
   { volume: 0.4 }
   );
 
-const [muted, setMuted] = useState(false);
+
 
 useEffect(() => {
   fetchCategories();

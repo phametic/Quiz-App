@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useSound from 'use-sound';
 import hoverSfx from '../Assets/Sounds/hover_sound.mp3';
 

@@ -9,16 +9,12 @@ export default function ResultsScreen(props) {
         switch(true){
             case totalPercentage > 0 && totalPercentage < 25:
                 return "Better Luck Next Time!"
-            break;
             case totalPercentage > 25 && totalPercentage < 50:
                 return "Could've Been Better!"
-            break;
             case totalPercentage > 50 && totalPercentage < 75:
-                return "Wow, Great Job!"
-            break;
+                return "Wow, Not Bad At All! "
             case totalPercentage > 75 && totalPercentage < 100:
-                return "Wow, You Are The Trivia Master!"
-            break;
+                return "You Are The Trivia Master!"
             default:
             return "Not Too Bad!"
         }
