@@ -23,8 +23,8 @@ export default function MainScreen(props) {
                     onMouseEnter={() => onEnterHandle()}
                 >
                     GET STARTED</button>
-                <div className="blob-1 bg-[#FFFAD1] w-32 h-32 ml-[100%] mb-[500px] md:w-80 md:h-80 absolute rotate-45"></div>
-                <div className="blob-2 bg-[#DEEBF8] w-32 h-32 mr-[100%] mt-[500px] md:w-80 md:h-80 absolute rotate-12"></div>
+                <div className="blob-1 bg-[#FFFAD1] w-32 h-32 ml-[100%] mb-[500px] lg:mb-[70%] md:w-80 md:h-80 lg:w-96 lg:h-96 absolute rotate-45"></div>
+                <div className="blob-2 bg-[#DEEBF8] w-32 h-32 mr-[100%] mt-[500px] lg:mt-[70%] md:w-80 md:h-80 lg:w-96 lg:h-96 absolute rotate-12"></div>
             </div>
         </div>
     )
